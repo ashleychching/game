@@ -19,6 +19,7 @@ green = (0, 255, 0)
 player_size = 50
 player_x = screen_width // 2 - player_size // 2
 player_y = screen_height - player_size - 10
+player_surface = pygame.image.load('graphics/Dog-Sheets/Dog_Navy.png')
 
 # Set up enemy cars
 car_width = 140
@@ -30,11 +31,17 @@ car_speed = 5
 clock = pygame.time.Clock()
 game_over = False
 
+
 def draw_player(x, y):
     pygame.draw.rect(window, white, (x, y, player_size, player_size))
 
+
+window.blit(player_surface, (600, 250))
+
+
 def draw_car(x, y):
     pygame.draw.rect(window, green, (x, y, car_width, car_height))
+
 
 while not game_over:
     for event in pygame.event.get():
