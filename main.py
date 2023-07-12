@@ -3,18 +3,22 @@ from pygame import *
 from screen_setup import setup_screen
 import end
 import random
-from newbutton import Button
-#from button import Button
+from button import Button
+
+# from button import Button
 
 window, screen_width, screen_height = setup_screen()
 
+
 # Set up colors
-black = (0, 0, 0)
-white = (255, 255, 255)
-green = (75, 104, 88)
-blue = (229, 236, 244)
-mint = (239, 255, 250)
-purple = (127, 118, 173)
+class Colors:
+    black = (0, 0, 0)
+    white = (255, 255, 255)
+    green = (75, 104, 88)
+    blue = (229, 236, 244)
+    mint = (239, 255, 250)
+    purple = (127, 118, 173)
+
 
 # Set up the player character
 player_size = 50
@@ -36,63 +40,58 @@ game_over = False
 end_start = False
 logo = pygame.image.load('graphics/logo/with image.png')
 logoRect = logo.get_rect()
-logoRect.center = (screen_width / 2, screen_height / 2)
+logoRect.center = (screen_width / 2, screen_height / 2.5)
 
-#start/play button
+# start/play button
 button_width = 200
 button_height = 50
 button_x = (screen_width - button_width) // 2
-button_y = (screen_height - button_height) // 2
-button_color = (0, 255, 0)  # Green
-button_hover_color = (200, 200, 0)  # Darker green
-button_text = "play!"
+button_y = (screen_height - button_height) // 1.25
+button_color = Colors.purple
+button_hover_color = Colors.mint
+button_text = ""
 button_text_color = (255, 255, 255)  # White
 button_font = pygame.font.Font(None, 32)
 button_rect = pygame.Rect(
-    screen_width // 2 - button_width // 2,
-    screen_height // 2 - button_height // 2,
+    button_x,
+    button_y,
     button_width,
     button_height,
 )
+button_image = pygame.image.load("graphics/icons/dog running.png")
+button_image = pygame.transform.scale(button_image, (button_width / 4, button_height))
+
+
 def button_clicked():
     print("Button clicked!")
 
+
 # start Screen
 while (end_start == False):
-    window.fill(blue)
+    window.fill(Colors.blue)
     window.blit(logo, logoRect)
     myfont = pygame.font.SysFont("Britannic Bold", 40)
-    # Create the button instance
-    button = Button(button_x, button_y, button_width, button_height, button_color, button_hover_color,
-                    button_text, button_text_color, button_font, button_clicked)
-    button.draw(window)
-    for event in pygame.event.get():
-        if event.type == MOUSEBUTTONDOWN:
-            end_start = True
-
+    start_button = Button(button_x, button_y, button_width, button_height, button_color, button_hover_color,
+                          button_text, button_text_color, button_font, button_clicked, border_radius=10,
+                          image=button_image, shadow_color=Colors.green, shadow_offset=(7, 7))
+    start_button.draw(window)
     pygame.display.flip()
-
-    running = True
-    while running:
+    while not end_start:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 # Check if the left mouse button is clicked
                 mouse_pos = pygame.mouse.get_pos()
                 if button_rect.collidepoint(mouse_pos):
-                    print("Start game!")
-                    end_start =True
-
+                    end_start = True
 
 
 def draw_player(x, y):
-    pygame.draw.rect(window, white, (x, y, player_size, player_size))
+    pygame.draw.rect(window, Colors.white, (x, y, player_size, player_size))
     window.blit(player_surface, (x, y))
 
 
 def draw_car(x, y):
-    pygame.draw.rect(window, green, (x, y, car_width, car_height))
+    pygame.draw.rect(window, Colors.green, (x, y, car_width, car_height))
     window.blit(car_surface, (x, y))
 
 
@@ -111,7 +110,7 @@ while not game_over:
     if keys[pygame.K_DOWN]:
         player_y += 5
 
-    window.fill(black)
+    window.fill(Colors.black)
     draw_player(player_x, player_y)
 
     car_x -= car_speed
@@ -123,7 +122,6 @@ while not game_over:
 
     if player_x < car_x + car_width and player_x + player_size > car_x and player_y < car_y + car_height and player_y + player_size > car_y:
         game_over = True
-
 
     pygame.display.update()
     clock.tick(60)
