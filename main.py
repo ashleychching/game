@@ -5,8 +5,6 @@ import end
 import random
 from button import Button
 
-# from button import Button
-
 window, screen_width, screen_height = setup_screen()
 
 
@@ -20,27 +18,95 @@ class Colors:
     purple = (127, 118, 173)
 
 
+class Player:
+    def __init__(self, x, y, size, image):
+        self.x = x
+        self.y = y
+        self.size = size
+        self.image = image
+        self.rect = self.image.get_rect(center=(self.x, self.y))
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
+
+    def update(self):
+        self.rect.center = (self.x, self.y)
+
+    def move(self, dx, dy):
+        self.x += dx
+        self.y += dy
+        self.update()
+
+    def handle_event(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                self.move(-5, 0)
+            elif event.key == pygame.K_RIGHT:
+                self.move(5, 0)
+            elif event.key == pygame.K_UP:
+                self.move(0, -5)
+            elif event.key == pygame.K_DOWN:
+                self.move(0, 5)
+
+    def get_rect(self):
+        return self.rect.copy()
+
+
+class Car:
+    def __init__(self, x, y, width, height, speed, image):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.speed = speed
+        self.image = pygame.transform.scale(image, (width, height))
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+
+    def draw(self, surface):
+        surface.blit(self.image, (self.x, self.y))
+
+    def update(self):
+        self.x -= self.speed
+        self.rect.x = self.x
+
+    def reset(self, screen_width, screen_height):
+        self.x = screen_width + self.width
+        self.y = random.randint(0, screen_height - self.height)
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+
+# collision logic
+def update_game():
+    global game_over
+
+    car.update()
+    car.draw(window)
+
+    if car.x < -car.width:
+        car.reset(screen_width, screen_height)
+
+    player_rect = player.get_rect()
+    car_rect = car.rect
+
+    if player_rect.colliderect(car_rect):
+        game_over = True
+
+
 # Set up the player character
 player_size = 50
 player_x = screen_width // 2 - player_size // 2
 player_y = screen_height - player_size - 10
-player_surface = pygame.image.load('graphics/doggos/black dog/tile000.png')
+player_image = pygame.image.load('graphics/doggos/black dog/tile000.png')
+player = Player(player_x, player_y, player_size, player_image)
 
 # Set up enemy cars
 car_width = 140
 car_height = 70
-car_x = screen_width + car_width
-car_y = random.randint(0, screen_height - car_height)
-car_surface = pygame.image.load('graphics/cars/tile001.png')
-car_surface = pygame.transform.scale(car_surface, (car_width, car_height))
 car_speed = 5
-
-clock = pygame.time.Clock()
-game_over = False
-end_start = False
-logo = pygame.image.load('graphics/logo/with image.png')
-logoRect = logo.get_rect()
-logoRect.center = (screen_width / 2, screen_height / 2.5)
+car_image = pygame.image.load('graphics/cars/tile001.png')
+car = Car(screen_width + car_width, random.randint(0, screen_height - car_height), car_width, car_height, car_speed,
+          car_image)
 
 # start/play button
 button_width = 200
@@ -66,6 +132,11 @@ def button_clicked():
     print("Button clicked!")
 
 
+# start screen variables
+end_start = False
+logo = pygame.image.load('graphics/logo/with image.png')
+logoRect = logo.get_rect()
+logoRect.center = (screen_width / 2, screen_height / 2.5)
 # start Screen
 while (end_start == False):
     window.fill(Colors.blue)
@@ -83,45 +154,28 @@ while (end_start == False):
                 mouse_pos = pygame.mouse.get_pos()
                 if button_rect.collidepoint(mouse_pos):
                     end_start = True
-
-
-def draw_player(x, y):
-    pygame.draw.rect(window, Colors.white, (x, y, player_size, player_size))
-    window.blit(player_surface, (x, y))
-
-
-def draw_car(x, y):
-    pygame.draw.rect(window, Colors.green, (x, y, car_width, car_height))
-    window.blit(car_surface, (x, y))
-
-
+game_over = False
+clock = pygame.time.Clock()
+# game loop
 while not game_over:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_over = True
+        player.handle_event(event)
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
-        player_x -= 5
+        player.move(-5, 0)
     if keys[pygame.K_RIGHT]:
-        player_x += 5
+        player.move(5, 0)
     if keys[pygame.K_UP]:
-        player_y -= 5
+        player.move(0, -5)
     if keys[pygame.K_DOWN]:
-        player_y += 5
+        player.move(0, 5)
 
-    window.fill(Colors.black)
-    draw_player(player_x, player_y)
-
-    car_x -= car_speed
-    draw_car(car_x, car_y)
-
-    if car_x < -car_width:
-        car_x = screen_width + car_width
-        car_y = random.randint(0, screen_height - car_height)
-
-    if player_x < car_x + car_width and player_x + player_size > car_x and player_y < car_y + car_height and player_y + player_size > car_y:
-        game_over = True
+    window.fill(Colors.purple )
+    player.draw(window)
+    update_game()
 
     pygame.display.update()
     clock.tick(60)
