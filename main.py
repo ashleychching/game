@@ -27,12 +27,48 @@ class Player:
         self.size = size
         self.image = image
         self.rect = self.image.get_rect(center=(self.x, self.y))
+        self.sprites = []
+        self.sprites.append(pygame.image.load('graphics/doggos/black dog/tile000.png'))
+        self.sprites.append(pygame.image.load('graphics/doggos/black dog/tile001.png'))
+        self.sprites.append(pygame.image.load('graphics/doggos/black dog/tile002.png'))
+        self.sprites.append(pygame.image.load('graphics/doggos/black dog/tile003.png'))
+        self.sprites.append(pygame.image.load('graphics/doggos/black dog/tile004.png'))
+        self.sprites.append(pygame.image.load('graphics/doggos/black dog/tile005.png'))
+        self.sprites.append(pygame.image.load('graphics/doggos/black dog/tile006.png'))
+        self.sprites.append(pygame.image.load('graphics/doggos/black dog/tile007.png'))
+        self.sprites.append(pygame.image.load('graphics/doggos/black dog/tile008.png'))
+
+        self.left_sprites = [pygame.image.load('graphics/doggos/black dog/tile000.png'),
+                             pygame.image.load('graphics/doggos/black dog/tile001.png'),
+                             pygame.image.load('graphics/doggos/black dog/tile002.png'),
+                             pygame.image.load('graphics/doggos/black dog/tile003.png')]
+        self.right_sprites = [pygame.image.load('graphics/doggos/navy dog dog/tile000.png'),
+                              pygame.image.load('graphics/doggos/navy dog/tile001.png'),
+                              pygame.image.load('graphics/doggos/navy dog/tile002.png'),
+                              pygame.image.load('graphics/doggos/navy dog/tile003.png')]
+        self.up_sprites = [pygame.image.load('graphics/doggos/white brown dog/tile000.png'),
+                           pygame.image.load('graphics/doggos/white brown dog/tile001.png'),
+                           pygame.image.load('graphics/doggos/white brown dog/tile002.png'),
+                           pygame.image.load('graphics/doggos/white brown dog/tile003.png')]
+        self.down_sprites = [pygame.image.load('graphics/doggos/black white dog/tile000.png'),
+                             pygame.image.load('graphics/doggos/black white dog/tile001.png'),
+                             pygame.image.load('graphics/doggos/black white dog/tile002.png'),
+                             pygame.image.load('graphics/doggos/black white dog/tile003.png')]
+        self.current_animation = None
+
+        self.current_sprite= 0
+        self.image= self.sprites[self.current_sprite]
+
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 
     def update(self):
         self.rect.center = (self.x, self.y)
+        self.current_sprite += .2
+        if self.current_sprite >= len(self.sprites):
+            self.current_sprite = 0
+        self.image = self.sprites[int(self.current_sprite)]
 
     def move(self, dx, dy):
         self.x += dx
@@ -105,6 +141,7 @@ def update_game():
 player_size = 50
 player_x = screen_width // 2 - player_size // 2
 player_y = screen_height - player_size - 10
+
 player_image = pygame.image.load('graphics/doggos/black dog/tile000.png')
 player = Player(player_x, player_y, player_size, player_image)
 
