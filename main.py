@@ -4,6 +4,7 @@ from screen_setup import setup_screen
 import end
 import random
 from button import Button
+import os
 from audio import play_audio
 
 window, screen_width, screen_height = setup_screen()
@@ -40,7 +41,7 @@ class Player:
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
-            moving_sound= mixer.Sound("audio/jump1.mp3")
+            moving_sound = mixer.Sound("audio/jump1.mp3")
             moving_sound2 = mixer.Sound("audio/jump2.mp3")
             moving_sound.set_volume(.1)
             moving_sound2.set_volume(.3)
@@ -180,7 +181,8 @@ select_button_rect = pygame.Rect(
     select_button_height,
 )
 select_button_image = pygame.image.load("graphics/icons/white sel char.png")
-select_button_image = pygame.transform.scale(select_button_image, (select_button_width/1.3 , select_button_height/1.3))
+select_button_image = pygame.transform.scale(select_button_image,
+                                             (select_button_width / 1.3, select_button_height / 1.3))
 
 # start screen variables
 end_start = False
@@ -231,6 +233,7 @@ while not end_start:
 
 game_over = False
 clock = pygame.time.Clock()
+
 # game loop
 while not game_over:
     for event in pygame.event.get():
