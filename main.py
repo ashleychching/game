@@ -4,21 +4,13 @@ from screen_setup import setup_screen
 import end
 import random
 from button import Button
+import select_page
+from colors import Colors
+import time
+
 from audio import play_audio
 
 window, screen_width, screen_height = setup_screen()
-
-
-# Set up colors
-class Colors:
-    black = (0, 0, 0)
-    white = (255, 255, 255)
-    green = (75, 104, 88)
-    blue = (229, 236, 244)
-    mint = (239, 255, 250)
-    purple = (127, 118, 173)
-
-
 class Player:
     def __init__(self, x, y, size, image):
         self.x = x
@@ -118,7 +110,6 @@ class Player:
         self.animation_timer = pygame.time.get_ticks()
         self.animation_interval = 18
 
-
     def draw(self, surface):
         if self.current_animation and len(self.current_animation) > 0:
             surface.blit(self.current_animation[self.current_sprite], self.rect)
@@ -154,7 +145,7 @@ class Player:
                 self.current_animation = self.up_sprites
             elif event.key == pygame.K_DOWN:
                 self.current_animation = self.down_sprites
-            self.play_animation= True
+            self.play_animation = True
 
     def get_rect(self):
         return self.rect.copy()
@@ -198,6 +189,10 @@ def update_game():
     car_rect = car.rect
 
     if player_rect.colliderect(car_rect):
+        crash_sound = mixer.Sound("audio/crash.mp3")
+        crash_sound.set_volume(.3)
+        crash_sound.play()
+        time.sleep(.5)
         game_over = True
 
 
@@ -322,6 +317,7 @@ while not end_start:
             # Check if the left mouse button is clicked
             mouse_pos = pygame.mouse.get_pos()
             if start_button_rect.collidepoint(mouse_pos):
+                time.sleep(.15)
                 end_start = True
             if volume_button_rect.collidepoint(mouse_pos):
                 volume_on = not volume_on
@@ -331,9 +327,16 @@ while not end_start:
                 else:
                     volume_button_image = volume_off_icon
                     mixer.music.unpause()
-
+            if select_button_rect.collidepoint(mouse_pos):
+                time.sleep(.15)
+                select_page.open_select_page()
 game_over = False
 clock = pygame.time.Clock()
+
+move_left = False
+move_right = False
+move_up = False
+move_down = False
 
 # game loop
 while not game_over:
@@ -341,22 +344,38 @@ while not game_over:
         if event.type == pygame.QUIT:
             game_over = True
         player.handle_event(event)
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT]:
-        player.move(-5, 0)
-    if keys[pygame.K_RIGHT]:
-        player.move(5, 0)
-    if keys[pygame.K_UP]:
-        player.move(0, -5)
-    if keys[pygame.K_DOWN]:
-        player.move(0, 5)
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT and not move_left:
+                move_left = True
+                player.move(-40, 0)
+            elif event.key == pygame.K_RIGHT and not move_right:
+                move_right = True
+                player.move(40, 0)
+            elif event.key == pygame.K_UP and not move_up:
+                move_up = True
+                player.move(0, -40)
+            elif event.key == pygame.K_DOWN and not move_down:
+                move_down = True
+                player.move(0, 40)
+
+            # Check for key release events
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT:
+                move_left = False
+            elif event.key == pygame.K_RIGHT:
+                move_right = False
+            elif event.key == pygame.K_UP:
+                move_up = False
+            elif event.key == pygame.K_DOWN:
+                move_down = False
     player.update()
 
     window.fill(Colors.purple)
     player.draw(window)
     update_game()
-
     pygame.display.update()
     clock.tick(60)
+
 end.end_screen()
 pygame.quit()
