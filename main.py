@@ -11,6 +11,8 @@ import time
 from audio import play_audio
 
 window, screen_width, screen_height = setup_screen()
+
+
 class Player:
     def __init__(self, x, y, size, image):
         self.x = x
@@ -21,90 +23,90 @@ class Player:
         self.animation_counter = 0
         self.current_sprite = 0
         self.play_animation = False
-        self.left_sprites = [pygame.transform.rotate(pygame.image.load('graphics/doggos/black dog/tile012.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/black dog/tile013.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/black dog/tile014.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/black dog/tile015.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/black dog/tile016.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/black dog/tile017.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/black dog/tile018.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/black dog/tile019.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/black dog/tile020.png'), -20),
+        self.left_sprites = [pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile012.png'), -20),
+                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile013.png'), -20),
+                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile014.png'), -20),
+                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile015.png'), -20),
+                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile016.png'), -20),
+                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile017.png'), -20),
+                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile018.png'), -20),
+                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile019.png'), -20),
+                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile020.png'), -20),
                              ]
         self.right_sprites = [
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/navy dog/tile012.png'), 20), True, False),
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile012.png'), 20), True, False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/navy dog/tile013.png'), 20), True, False),
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile013.png'), 20), True, False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/navy dog/tile014.png'), 20), True, False),
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile014.png'), 20), True, False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/navy dog/tile015.png'), 20), True, False),
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile015.png'), 20), True, False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/navy dog/tile016.png'), 20), True, False),
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile016.png'), 20), True, False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/navy dog/tile017.png'), 20), True, False),
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile017.png'), 20), True, False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/navy dog/tile018.png'), 20), True, False),
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile018.png'), 20), True, False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/navy dog/tile019.png'), 20), True, False),
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile019.png'), 20), True, False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/navy dog/tile020.png'), 20), True, False)
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile020.png'), 20), True, False)
         ]
         self.up_sprites = [
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile012.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile012.png'), 310), True,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile013.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile013.png'), 310), True,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile014.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile014.png'), 310), True,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile015.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile015.png'), 310), True,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile016.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile016.png'), 310), True,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile017.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile017.png'), 310), True,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile018.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile018.png'), 310), True,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile019.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile019.png'), 310), True,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile020.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile020.png'), 310), True,
                 False)]
         self.down_sprites = [pygame.transform.flip(
-            pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile012.png'), 30), False,
+            pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile012.png'), 30), False,
             False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile013.png'), 30), False,
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile013.png'), 30), False,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile014.png'), 30), False,
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile014.png'), 30), False,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile015.png'), 30), False,
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile015.png'), 30), False,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile016.png'), 30), False,
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile016.png'), 30), False,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile017.png'), 30), False,
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile017.png'), 30), False,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile018.png'), 30), False,
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile018.png'), 30), False,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile019.png'), 30), False,
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile019.png'), 30), False,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/white brown dog/tile020.png'), 30), False,
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile020.png'), 30), False,
                 False)]
         self.current_animation = self.up_sprites
         self.animation_timer = pygame.time.get_ticks()
@@ -201,7 +203,7 @@ player_size = 50
 player_x = screen_width // 2 - player_size // 2
 player_y = screen_height - player_size - 10
 
-player_image = pygame.image.load('graphics/doggos/black dog/tile000.png')
+player_image = pygame.image.load('graphics/doggos/doggo1/tile000.png')
 player = Player(player_x, player_y, player_size, player_image)
 
 # Set up enemy cars
@@ -285,16 +287,24 @@ end_start = False
 logo = pygame.image.load('graphics/logo/with image.png')
 logoRect = logo.get_rect()
 logoRect.center = (screen_width / 2, screen_height / 2.5)
+# button rendering
+start_button = Button(start_button_x, start_button_y, start_button_width, start_button_height, start_button_color,
+                      start_button_hover_color,
+                      start_button_text, start_button_text_color, start_button_font, button_clicked,
+                      border_radius=10,
+                      image=start_button_image, shadow_color=Colors.green, shadow_offset=(7, 7))
+
+select_button = Button(select_button_x, select_button_y, select_button_width, select_button_height,
+                       select_button_color,
+                       select_button_hover_color,
+                       select_button_text, select_button_text_color, select_button_font, button_clicked,
+                       border_radius=10,
+                       image=select_button_image, shadow_color=Colors.green, shadow_offset=(7, 7))
 # start screen
 while not end_start:
     window.fill(Colors.blue)
     window.blit(logo, logoRect)
     myfont = pygame.font.SysFont("Britannic Bold", 40)
-    start_button = Button(start_button_x, start_button_y, start_button_width, start_button_height, start_button_color,
-                          start_button_hover_color,
-                          start_button_text, start_button_text_color, start_button_font, button_clicked,
-                          border_radius=10,
-                          image=start_button_image, shadow_color=Colors.green, shadow_offset=(7, 7))
     start_button.draw(window)
     volume_button = Button(volume_button_x, volume_button_y, volume_button_width, volume_button_height,
                            volume_button_color,
@@ -303,12 +313,6 @@ while not end_start:
                            border_radius=10,
                            image=volume_button_image, shadow_color=Colors.green, shadow_offset=(7, 7))
     volume_button.draw(window)
-    select_button = Button(select_button_x, select_button_y, select_button_width, select_button_height,
-                           select_button_color,
-                           select_button_hover_color,
-                           select_button_text, select_button_text_color, select_button_font, button_clicked,
-                           border_radius=10,
-                           image=select_button_image, shadow_color=Colors.green, shadow_offset=(7, 7))
     select_button.draw(window)
     pygame.display.flip()
 
