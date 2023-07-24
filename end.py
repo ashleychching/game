@@ -20,11 +20,15 @@ def end_screen():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
+                return False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    return
+                    return True
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                # Check if the left mouse button is clicked
+                mouse_pos = pygame.mouse.get_pos()
+                if replayRect.collidepoint(mouse_pos):
+                    return True  # Return True if the replay button is clicked
 
         window.fill([255, 255, 255])  # Fill the window with white color
         window.blit(replay, replayRect)
@@ -36,4 +40,10 @@ def end_screen():
 
 # Call the start_screen() function when the module is executed directly
 if __name__ == "__main__":
-    end_screen()
+    while True:
+        if end_screen():
+            game_over = False
+            print("hellllooooooo")
+            continue
+        else:
+            break
