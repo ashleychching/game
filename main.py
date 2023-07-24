@@ -36,7 +36,7 @@ def render(object, screen):
 
 class Grass():
     def __init__(self, x, y):
-        self.image = pygame.transform.scale((pygame.image.load('grass.png')), (64, 64))
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/grass.png')), (64, 64))
         self.rect = self.image.get_rect()
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
@@ -44,7 +44,7 @@ class Grass():
 
 class Water():
     def __init__(self, x, y):
-        self.image = pygame.transform.scale((pygame.image.load('water.png')), (64, 64))
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/water.png')), (64, 64))
         self.rect = self.image.get_rect()
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
@@ -52,7 +52,7 @@ class Water():
 
 class Railroad():
     def __init__(self, x, y):
-        self.image = pygame.transform.scale((pygame.image.load('railroad.png')), (64, 64))
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/railroad.png')), (64, 64))
         self.rect = self.image.get_rect()
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
@@ -60,7 +60,7 @@ class Railroad():
 
 class Road():
     def __init__(self, x, y):
-        self.image = pygame.transform.scale((pygame.image.load('road.png')), (64, 64))
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/road.png')), (64, 64))
         self.rect = self.image.get_rect()
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
@@ -68,49 +68,49 @@ class Road():
 
 class TallTree():
     def __init__(self, x, y):
-        self.image = pygame.transform.scale((pygame.image.load('tallTree.png')), (64, 64))
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/tallTree.png')), (64, 64))
         self.rect = self.image.get_rect()
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
 
 class ShortTree():
     def __init__(self, x, y):
-        self.image = pygame.transform.scale((pygame.image.load('shortTree.png')), (64, 64))
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/shortTree.png')), (64, 64))
         self.rect = self.image.get_rect()
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
 
 class SmallRock():
     def __init__(self, x, y):
-        self.image = pygame.transform.scale((pygame.image.load('smallrock.png')), (48, 48))
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/smallrock.png')), (48, 48))
         self.rect = self.image.get_rect()
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
 
 class Lilypad():
     def __init__(self, x, y):
-        self.image = pygame.transform.scale((pygame.image.load('lilypad.png')), (48, 48))
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/lilypad.png')), (48, 48))
         self.rect = self.image.get_rect()
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
 
 class Log():
     def __init__(self, x, y):
-        self.image = pygame.transform.scale((pygame.image.load('log.png')), (48, 48))
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/log.png')), (48, 48))
         self.rect = self.image.get_rect()
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
 
 class Bench():
     def __init__(self, x, y):
-        self.image = pygame.transform.scale((pygame.image.load('bench.png')), (42, 42))
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/bench.png')), (42, 42))
         self.rect = self.image.get_rect()
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
 
 class Player:
     def __init__(self, x, y):
-        self.image = pygame.transform.scale((pygame.image.load('explayer.png')), (32, 32))
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/explayer.png')), (32, 32))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
