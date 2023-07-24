@@ -1,12 +1,9 @@
-import pygame
+import pygame, random, end, select_page, time
 from pygame import *
 from screen_setup import setup_screen
-import end
-import random
 from button import Button
-import select_page
 from colors import Colors
-import time
+
 
 from audio import play_audio
 
@@ -317,6 +314,11 @@ while not end_start:
     pygame.display.flip()
 
     for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             # Check if the left mouse button is clicked
             mouse_pos = pygame.mouse.get_pos()
@@ -334,6 +336,7 @@ while not end_start:
             if select_button_rect.collidepoint(mouse_pos):
                 time.sleep(.15)
                 select_page.open_select_page()
+
 game_over = False
 clock = pygame.time.Clock()
 
