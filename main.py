@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 from pygame import *
 from screen_setup import setup_screen
@@ -181,6 +183,8 @@ class Game:
     def __init__(self):
         pygame.init()
         self.clock = pygame.time.Clock()
+        self.jump_count = 0
+        self.previous_move_direction = None
         self.game_over = False
         self.move_left = False
         self.move_right = False
@@ -324,6 +328,11 @@ class Game:
         pygame.display.flip()
 
         for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 # Check if the left mouse button is clicked
                 mouse_pos = pygame.mouse.get_pos()
@@ -343,7 +352,8 @@ class Game:
                     select_page.open_select_page()
 
     def game_loop(self):
-        # game loop
+        counter_font = pygame.font.Font(None, 36)
+        counter_pos = (10, 10)
         while not self.game_over:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -360,9 +370,17 @@ class Game:
                     elif event.key == pygame.K_UP and not self.move_up:
                         self.move_up = True
                         self.player.move(0, -40)
+                        self.jump_count += 1
+                        if (self.move_left and self.previous_move_direction != "left") or \
+                                (self.move_right and self.previous_move_direction != "right") or \
+                                (self.move_up and self.previous_move_direction != "up" and not self.move_down) or \
+                                (self.move_down and self.previous_move_direction != "down" and not self.move_up):
+                            self.jump_count += 1
+                            self.previous_move_direction = None
                     elif event.key == pygame.K_DOWN and not self.move_down:
                         self.move_down = True
                         self.player.move(0, 40)
+
 
                     # Check for key release events
                 if event.type == pygame.KEYUP:
@@ -374,10 +392,14 @@ class Game:
                         self.move_up = False
                     elif event.key == pygame.K_DOWN:
                         self.move_down = False
+
+
             self.player.update()
 
             window.fill(Colors.purple)
             self.player.draw(window)
+            counter_text = counter_font.render(f"Jumps: {self.jump_count}", True, Colors.white)
+            window.blit(counter_text, counter_pos)
             self.update_game()
             pygame.display.update()
             self.clock.tick(60)
