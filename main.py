@@ -376,7 +376,6 @@ class Game:
                     elif event.key == pygame.K_UP and not self.move_up:
                         self.move_up = True
                         self.player.move(0, -40)
-                        self.jump_count += 1
                         if (self.move_left and self.previous_move_direction != "left") or \
                                 (self.move_right and self.previous_move_direction != "right") or \
                                 (self.move_up and self.previous_move_direction != "up" and not self.move_down) or \

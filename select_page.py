@@ -23,7 +23,7 @@ return_button_rect = pygame.Rect(
 )
 return_button_image = pygame.image.load("graphics/icons/white return.png")
 return_button_image = pygame.transform.scale(return_button_image,
-                                             (return_button_width / 1.3, return_button_height / 1.3))
+                                             (return_button_width // 3, return_button_height // 3))
 return_button = Button(return_button_x, return_button_y, return_button_width, return_button_height,
                        return_button_color,
                        return_button_hover_color,
@@ -35,8 +35,7 @@ return_button = Button(return_button_x, return_button_y, return_button_width, re
 character_images = [pygame.image.load(f"graphics/doggos/doggo{i}/tile000.png") for i in range(1, 7)]
 
 # Character selection variables
-selected_character = 0
-characters_rects = []
+selected_character = None
 
 # Calculate the number of characters per row and column
 characters_per_row = 3
@@ -61,6 +60,7 @@ font = pygame.font.Font(None, 24)
 
 
 def draw_characters():
+    characters_rects = []  # Create an empty list for the character rectangles
     for i, image in enumerate(character_images):
         row = i // characters_per_row
         col = i % characters_per_row
@@ -70,6 +70,44 @@ def draw_characters():
         characters_rects.append(rect)
         pygame.draw.rect(window, Colors.green, rect)
         window.blit(image, (x + 5, y + 5))
+
+    return characters_rects
+
+
+def handle_character_selection():
+    global selected_character
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                mouse_pos = pygame.mouse.get_pos()
+                if return_button_rect.collidepoint(mouse_pos):
+                    running = False
+                for i, rect in enumerate(draw_characters()):  # Call draw_characters() to get the character rects
+                    if rect.collidepoint(mouse_pos):
+                        selected_character = i
+                        running = False
+
+        window.fill(Colors.mint)
+        return_button.draw(window)
+        for i, image in enumerate(character_images):
+            row = i // characters_per_row
+            col = i % characters_per_row
+            x = characters_section_start_x + col * (character_image_width + character_gap_x)
+            y = characters_section_start_y + row * (character_image_height + character_gap_y)
+            text = font.render(f"Doggo {i + 1}", True, Colors.black)
+            window.blit(text, (x, y + character_image_height + 5))
+
+            if selected_character == i:
+                pygame.draw.rect(window, Colors.green, (x, y, character_image_width, character_image_height), 2)
+
+        pygame.display.update()
+        print("Selected Character:", selected_character)
+
+    return selected_character
 
 
 def open_select_page():
@@ -86,14 +124,14 @@ def open_select_page():
                 mouse_pos = pygame.mouse.get_pos()
                 if return_button_rect.collidepoint(mouse_pos):
                     select_page_running = False  # Exit the select page loop and close the screen
-                for i, rect in enumerate(characters_rects):
+                for i, rect in enumerate(draw_characters()):  # Call the draw_characters() function here
                     if rect.collidepoint(mouse_pos):
                         selected_character = i
                         select_page_running = False
 
         select_page_window.fill(Colors.mint)
         return_button.draw(select_page_window)  # Draw the return button on the select page window
-        draw_characters()
+        draw_characters()  # Call the draw_characters() function here
         for i, image in enumerate(character_images):
             row = i // characters_per_row
             col = i % characters_per_row
@@ -108,4 +146,5 @@ def open_select_page():
 
         pygame.display.update()
         print("Selected Character:", selected_character)
+
     return selected_character
