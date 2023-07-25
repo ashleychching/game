@@ -90,6 +90,7 @@ def open_select_page():
                     if rect.collidepoint(mouse_pos):
                         selected_character = i
                         select_page_running = False
+
         select_page_window.fill(Colors.mint)
         return_button.draw(select_page_window)  # Draw the return button on the select page window
         draw_characters()
@@ -102,9 +103,9 @@ def open_select_page():
             window.blit(text, (x, y + character_image_height + 5))
 
             if selected_character == i:
-                pygame.draw.rect(window, Colors.green, (x, y, character_image_width, character_image_height), 2)
+                pygame.draw.rect(select_page_window, Colors.green,
+                                 (x, y, character_image_width, character_image_height), 2)
 
         pygame.display.update()
         print("Selected Character:", selected_character)
-
-    # Return control to the main game loop when the select page is closed
+    return selected_character

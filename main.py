@@ -16,99 +16,105 @@ window, screen_width, screen_height = setup_screen()
 
 
 class Player:
-    def __init__(self, x, y, size, image):
+    def __init__(self, x, y, size, image, selected_character):
         self.x = x
         self.y = y
         self.size = size
         self.image = image
         self.rect = self.image.get_rect(center=(self.x, self.y))
+        self.selected_character = selected_character
+
+        # Update image paths based on the selected character
+        character_index = selected_character + 1
+        character_folder = f"graphics/doggos/doggo{character_index}"
+        self.image = pygame.image.load(f"{character_folder}/tile000.png")
         self.animation_counter = 0
         self.current_sprite = 0
         self.play_animation = False
-        self.left_sprites = [pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile012.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile013.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile014.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile015.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile016.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile017.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile018.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile019.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile020.png'), -20),
+        self.left_sprites = [pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile012.png'), -20),
+                             pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile013.png'), -20),
+                             pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile014.png'), -20),
+                             pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile015.png'), -20),
+                             pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile016.png'), -20),
+                             pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile017.png'), -20),
+                             pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile018.png'), -20),
+                             pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile019.png'), -20),
+                             pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile020.png'), -20),
                              ]
         self.right_sprites = [
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile012.png'), 20), True, False),
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile012.png'), 20), True, False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile013.png'), 20), True, False),
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile013.png'), 20), True, False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile014.png'), 20), True, False),
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile014.png'), 20), True, False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile015.png'), 20), True, False),
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile015.png'), 20), True, False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile016.png'), 20), True, False),
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile016.png'), 20), True, False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile017.png'), 20), True, False),
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile017.png'), 20), True, False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile018.png'), 20), True, False),
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile018.png'), 20), True, False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile019.png'), 20), True, False),
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile019.png'), 20), True, False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile020.png'), 20), True, False)
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile020.png'), 20), True, False)
         ]
         self.up_sprites = [
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile012.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile012.png'), 310), True,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile013.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile013.png'), 310), True,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile014.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile014.png'), 310), True,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile015.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile015.png'), 310), True,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile016.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile016.png'), 310), True,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile017.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile017.png'), 310), True,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile018.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile018.png'), 310), True,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile019.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile019.png'), 310), True,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile020.png'), 310), True,
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile020.png'), 310), True,
                 False)]
         self.down_sprites = [pygame.transform.flip(
-            pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile012.png'), 30), False,
+            pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile012.png'), 30), False,
             False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile013.png'), 30), False,
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile013.png'), 30), False,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile014.png'), 30), False,
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile014.png'), 30), False,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile015.png'), 30), False,
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile015.png'), 30), False,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile016.png'), 30), False,
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile016.png'), 30), False,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile017.png'), 30), False,
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile017.png'), 30), False,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile018.png'), 30), False,
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile018.png'), 30), False,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile019.png'), 30), False,
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile019.png'), 30), False,
                 False),
             pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile020.png'), 30), False,
+                pygame.transform.rotate(pygame.image.load(f'{character_folder}/tile020.png'), 30), False,
                 False)]
         self.current_animation = self.up_sprites
         self.animation_timer = pygame.time.get_ticks()
@@ -217,7 +223,7 @@ class Game:
     player_y = screen_height - player_size - 10
 
     player_image = pygame.image.load('graphics/doggos/doggo1/tile000.png')
-    player = Player(player_x, player_y, player_size, player_image)
+    player = Player(player_x, player_y, player_size, player_image, 2)
 
     # Set up enemy cars
     car_width = 140
@@ -246,7 +252,7 @@ class Game:
     start_button_image = pygame.image.load("graphics/icons/dog running.png")
     start_button_image = pygame.transform.scale(start_button_image, (start_button_width / 4, start_button_height))
 
-    def button_clicked():
+    def button_clicked(self):
         print("Button clicked!")
 
     # volume button variables
@@ -381,7 +387,6 @@ class Game:
                         self.move_down = True
                         self.player.move(0, 40)
 
-
                     # Check for key release events
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_LEFT:
@@ -392,7 +397,6 @@ class Game:
                         self.move_up = False
                     elif event.key == pygame.K_DOWN:
                         self.move_down = False
-
 
             self.player.update()
 
