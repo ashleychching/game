@@ -22,6 +22,7 @@ class Player:
         self.size = size
         self.image = image
         self.rect = self.image.get_rect(center=(self.x, self.y))
+        selected_character = select_page.open_select_page()
         self.selected_character = selected_character
 
         # Update image paths based on the selected character

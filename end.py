@@ -41,11 +41,3 @@ def end_screen():
         pygame.display.flip()
 
 
-if __name__ == "__main__":
-    while True:
-        if end_screen():
-            game_over = False
-            print("hellllooooooo")
-            continue
-        else:
-            break

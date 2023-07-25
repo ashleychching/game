@@ -23,7 +23,7 @@ return_button_rect = pygame.Rect(
 )
 return_button_image = pygame.image.load("graphics/icons/white return.png")
 return_button_image = pygame.transform.scale(return_button_image,
-                                             (return_button_width // 3, return_button_height // 3))
+                                             (return_button_width // 1.5, return_button_height // 1.5))
 return_button = Button(return_button_x, return_button_y, return_button_width, return_button_height,
                        return_button_color,
                        return_button_hover_color,
@@ -145,6 +145,5 @@ def open_select_page():
                                  (x, y, character_image_width, character_image_height), 2)
 
         pygame.display.update()
-        print("Selected Character:", selected_character)
 
     return selected_character
