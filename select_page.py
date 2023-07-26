@@ -5,6 +5,8 @@ from button import Button
 
 window, screen_width, screen_height = setup_screen()
 
+
+
 # return characters button
 return_button_width = 50
 return_button_height = 50
@@ -35,7 +37,7 @@ return_button = Button(return_button_x, return_button_y, return_button_width, re
 character_images = [pygame.image.load(f"graphics/doggos/doggo{i}/tile000.png") for i in range(1, 7)]
 
 # Character selection variables
-selected_character = None
+selected_character = 0
 
 # Calculate the number of characters per row and column
 characters_per_row = 3
@@ -128,6 +130,9 @@ def open_select_page():
                     if rect.collidepoint(mouse_pos):
                         selected_character = i
                         select_page_running = False
+                        f = open("char.txt", "w")
+                        f.write(f"{i}")
+                        f.close()
 
         select_page_window.fill(Colors.mint)
         return_button.draw(select_page_window)  # Draw the return button on the select page window
@@ -147,3 +152,4 @@ def open_select_page():
         pygame.display.update()
 
     return selected_character
+

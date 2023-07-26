@@ -1,5 +1,4 @@
 import sys
-
 import pygame
 from pygame import *
 from screen_setup import setup_screen
@@ -10,24 +9,27 @@ import select_page
 from colors import Colors
 import time
 
+# from select_page import selected_character
+exec(open('select_page.py').read())
+
 from audio import play_audio
 
 window, screen_width, screen_height = setup_screen()
 
 
+# from select_page import selected_character
+
 class Player:
-    def __init__(self, x, y, size, image, selected_character):
+    def __init__(self, x, y, size):
         self.x = x
         self.y = y
         self.size = size
-        self.image = image
-        self.rect = self.image.get_rect(center=(self.x, self.y))
-        selected_character = select_page.open_select_page()
-        self.selected_character = selected_character
 
         # Update image paths based on the selected character
-        character_index = selected_character + 1
-        character_folder = f"graphics/doggos/doggo{character_index}"
+        self.character_selection = open("char.txt", "r")
+        self.character_index = int(self.character_selection.read()) + 1
+        print(self.character_index)
+        character_folder = f"graphics/doggos/doggo{self.character_index}"
         self.image = pygame.image.load(f"{character_folder}/tile000.png")
         self.animation_counter = 0
         self.current_sprite = 0
@@ -120,6 +122,7 @@ class Player:
         self.current_animation = self.up_sprites
         self.animation_timer = pygame.time.get_ticks()
         self.animation_interval = 18
+        self.rect = self.image.get_rect(center=(self.x, self.y))
 
     def draw(self, surface):
         if self.current_animation and len(self.current_animation) > 0:
@@ -199,6 +202,7 @@ class Game:
         self.move_down = False
         self.game_loop()
 
+
     def update_game(self):
         global game_over
 
@@ -222,9 +226,6 @@ class Game:
     player_size = 50
     player_x = screen_width // 2 - player_size // 2
     player_y = screen_height - player_size - 10
-
-    player_image = pygame.image.load('graphics/doggos/doggo1/tile000.png')
-    player = Player(player_x, player_y, player_size, player_image, 2)
 
     # Set up enemy cars
     car_width = 140
@@ -318,6 +319,7 @@ class Game:
                            select_button_text, select_button_text_color, select_button_font, button_clicked,
                            border_radius=10,
                            image=select_button_image, shadow_color=Colors.green, shadow_offset=(7, 7))
+
     # start screen
     while not end_start:
         window.fill(Colors.blue)
@@ -345,6 +347,7 @@ class Game:
                 mouse_pos = pygame.mouse.get_pos()
                 if start_button_rect.collidepoint(mouse_pos):
                     time.sleep(.15)
+                    player = Player(player_x, player_y, player_size)
                     end_start = True
                 if volume_button_rect.collidepoint(mouse_pos):
                     volume_on = not volume_on
