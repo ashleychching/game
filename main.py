@@ -6,7 +6,6 @@ from button import Button
 from colors import Colors
 import time
 
-
 from audio import play_audio
 
 window, screen_width, screen_height = setup_screen()
@@ -32,11 +31,14 @@ with open("map.txt", 'w') as file:
     rowDisplay = [f'{row}{row.join(mapValues)}']
     file.writelines(rowDisplay)
 
+
 def toSCRCoord(x, y):
     return (x - y, (x + y) / 2 - 420)
 
+
 def render(object, screen):
     screen.blit(object.image, toSCRCoord(object.rect.x, object.rect.y))
+
 
 class Grass():
     def __init__(self, x, y):
@@ -77,12 +79,14 @@ class TallTree():
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
 
+
 class ShortTree():
     def __init__(self, x, y):
         self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/shortTree.png')), (64, 64))
         self.rect = self.image.get_rect()
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
+
 
 class SmallRock():
     def __init__(self, x, y):
@@ -91,12 +95,14 @@ class SmallRock():
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
 
+
 class Lilypad():
     def __init__(self, x, y):
         self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/lilypad.png')), (48, 48))
         self.rect = self.image.get_rect()
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
+
 
 class Log():
     def __init__(self, x, y):
@@ -105,13 +111,16 @@ class Log():
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
 
+
 class Bench():
     def __init__(self, x, y):
         self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/bench.png')), (42, 42))
         self.rect = self.image.get_rect()
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
-class Player:
+
+
+'''class Player:
     def __init__(self, x, y, size, image):
         self.x = x
         self.y = y
@@ -215,12 +224,15 @@ class Player:
             surface.blit(self.current_animation[self.current_sprite], self.rect)
 
     def update(self):
+        print(self.play_animation)
         if self.play_animation:  # Check if the animation should play
+            print(self.play_animation)
             current_time = pygame.time.get_ticks()
             if self.current_animation and len(self.current_animation) > 0:
                 if current_time - self.animation_timer >= self.animation_interval:
                     self.animation_timer = current_time
                     self.current_sprite = (self.current_sprite + 1) % len(self.current_animation)
+
                     if self.current_sprite == 0:
                         self.play_animation = False  # Stop the animation once it completes playing
 
@@ -250,7 +262,7 @@ class Player:
     def get_rect(self):
         return self.rect.copy()
 
-
+'''
 class Car:
     def __init__(self, x, y, width, height, speed, image):
         self.x = x
@@ -274,9 +286,10 @@ class Car:
         self.rect.x = self.x
         self.rect.y = self.y
 
+
 class Player2:
     def __init__(self, x, y, size, image):
-        self.image = pygame.transform.scale((pygame.image.load('graphics/doggos/doggo1/tile000.png')), (32, 32))
+        self.image = pygame.transform.scale((pygame.image.load('graphics/doggos/doggo6/tile000.png')), (32, 32))
         self.x = x
         self.y = y
         self.rect = self.image.get_rect(center=(self.x, self.y))
@@ -377,10 +390,20 @@ class Player2:
         self.animation_interval = 18
 
     def draw(self, surface):
+
         if self.current_animation and len(self.current_animation) > 0:
             surface.blit(self.current_animation[self.current_sprite], self.rect)
 
     def update(self):
+        k = pygame.key.get_pressed()
+        if k[K_UP]:
+            self.rect.y -= 5
+        if k[K_DOWN]:
+            self.rect.y += 5
+        if k[K_LEFT]:
+            self.rect.x -= 5
+        if k[K_RIGHT]:
+            self.rect.x += 5
         if self.play_animation:  # Check if the animation should play
             current_time = pygame.time.get_ticks()
             if self.current_animation and len(self.current_animation) > 0:
@@ -389,6 +412,7 @@ class Player2:
                     self.current_sprite = (self.current_sprite + 1) % len(self.current_animation)
                     if self.current_sprite == 0:
                         self.play_animation = False  # Stop the animation once it completes playing
+
     def move(self, dx, dy):
         self.x += dx
         self.y += dy
@@ -403,9 +427,13 @@ class Player2:
             moving_sound.play()
             moving_sound2.play()
             if event.key == pygame.K_LEFT:
+                print("left")
                 self.current_animation = self.left_sprites
+                print(self.current_animation)
             elif event.key == pygame.K_RIGHT:
+                print("right")
                 self.current_animation = self.right_sprites
+                print(self.current_animation)
             elif event.key == pygame.K_UP:
                 self.current_animation = self.up_sprites
             elif event.key == pygame.K_DOWN:
@@ -414,6 +442,8 @@ class Player2:
 
     def get_rect(self):
         return self.rect.copy()
+
+
 class Game:
     def __init__(self):
         self.screen = pygame.display.set_mode(SCREEN_SIZE)
@@ -446,17 +476,22 @@ class Game:
                 elif data[y][x] == "4":
                     t.append(Road(x, y))
                 elif data[y][x] == "P":
-                    self.player = Player2(x + 775, y + 140, 32, pygame.image.load('graphics/doggos/doggo1/tile000.png'))
+                    self.player = Player2(x + 975, y + 900, 32, pygame.image.load('graphics/doggos/doggo4/tile000.png'))
                     t.append(Grass(x, y))
         return t
 
     def events(self):
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
                 pygame.quit()
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
+
+            self.player.handle_event(event)
+        self.player.update()
 
     def renderSCR(self):
         for tile in self.tiles:
@@ -477,6 +512,8 @@ class Game:
     def main(self):
         self.start()
         self.update()
+
+
 # collision logic
 def update_game():
     global game_over
@@ -504,7 +541,7 @@ player_x = screen_width // 2 - player_size // 2
 player_y = screen_height - player_size - 10
 
 player_image = pygame.image.load('graphics/doggos/doggo1/tile000.png')
-player = Player(player_x, player_y, player_size, player_image)
+player = Player2(player_x, player_y, player_size, player_image)
 
 # Set up enemy cars
 car_width = 140
@@ -681,7 +718,6 @@ while not game_over:
             elif event.key == pygame.K_DOWN:
                 move_down = False
     player.update()
-
     window.fill(Colors.purple)
     player.draw(window)
     update_game()

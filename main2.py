@@ -205,3 +205,29 @@ class Game:
 g = Game()
 pygame.display.set_caption("Crossy Road")
 g.main()
+
+'''if event.type == pygame.KEYDOWN:
+    if event.key == pygame.K_LEFT and not move_left:
+        move_left = True
+        player.move(-40, 0)
+    elif event.key == pygame.K_RIGHT and not move_right:
+        move_right = True
+        player.move(40, 0)
+    elif event.key == pygame.K_UP and not move_up:
+        move_up = True
+        player.move(0, -40)
+    elif event.key == pygame.K_DOWN and not move_down:
+        move_down = True
+        player.move(0, 40)
+
+    # Check for key release events
+if event.type == pygame.KEYUP:
+    if event.key == pygame.K_LEFT:
+        move_left = False
+    elif event.key == pygame.K_RIGHT:
+        move_right = False
+    elif event.key == pygame.K_UP:
+        move_up = False
+    elif event.key == pygame.K_DOWN:
+        move_down = False
+player.update()'''
