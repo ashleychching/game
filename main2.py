@@ -202,8 +202,6 @@ class Game:
         self.start()
         self.update()
 
-pygame.init()
-
 g = Game()
 pygame.display.set_caption("Crossy Road")
 g.main()

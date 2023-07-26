@@ -11,7 +11,106 @@ from audio import play_audio
 
 window, screen_width, screen_height = setup_screen()
 
+SCREEN_SIZE = (800, 600)
+TILE_SIZE = 32
 
+map = {}
+
+values = range(34)
+# 1004?
+for i in values:
+    map[0] = "P11111111111111111111111111111111111111111111111111"
+    map[1] = "111111111111111111111111111111111111111111111111111"
+    map[2] = "111111111111111111111111111111111111111111111111111"
+    map[3] = "111111111111111111111111111111111111111111111111111"
+    map[4] = "111111111111111111111111111111111111111111111111111"
+    map[i] = str(int(str(random.randint(1, 4)) * 51))
+
+with open("map.txt", 'w') as file:
+    mapValues = [i for i in map.values()]
+    row = '\n'
+    rowDisplay = [f'{row}{row.join(mapValues)}']
+    file.writelines(rowDisplay)
+
+def toSCRCoord(x, y):
+    return (x - y, (x + y) / 2 - 420)
+
+def render(object, screen):
+    screen.blit(object.image, toSCRCoord(object.rect.x, object.rect.y))
+
+class Grass():
+    def __init__(self, x, y):
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/grass.png')), (64, 64))
+        self.rect = self.image.get_rect()
+        self.rect.x = x * TILE_SIZE
+        self.rect.y = y * TILE_SIZE
+
+
+class Water():
+    def __init__(self, x, y):
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/water.png')), (64, 64))
+        self.rect = self.image.get_rect()
+        self.rect.x = x * TILE_SIZE
+        self.rect.y = y * TILE_SIZE
+
+
+class Railroad():
+    def __init__(self, x, y):
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/railroad.png')), (64, 64))
+        self.rect = self.image.get_rect()
+        self.rect.x = x * TILE_SIZE
+        self.rect.y = y * TILE_SIZE
+
+
+class Road():
+    def __init__(self, x, y):
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/road.png')), (64, 64))
+        self.rect = self.image.get_rect()
+        self.rect.x = x * TILE_SIZE
+        self.rect.y = y * TILE_SIZE
+
+
+class TallTree():
+    def __init__(self, x, y):
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/tallTree.png')), (64, 64))
+        self.rect = self.image.get_rect()
+        self.rect.x = x * TILE_SIZE
+        self.rect.y = y * TILE_SIZE
+
+class ShortTree():
+    def __init__(self, x, y):
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/shortTree.png')), (64, 64))
+        self.rect = self.image.get_rect()
+        self.rect.x = x * TILE_SIZE
+        self.rect.y = y * TILE_SIZE
+
+class SmallRock():
+    def __init__(self, x, y):
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/smallrock.png')), (48, 48))
+        self.rect = self.image.get_rect()
+        self.rect.x = x * TILE_SIZE
+        self.rect.y = y * TILE_SIZE
+
+class Lilypad():
+    def __init__(self, x, y):
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/lilypad.png')), (48, 48))
+        self.rect = self.image.get_rect()
+        self.rect.x = x * TILE_SIZE
+        self.rect.y = y * TILE_SIZE
+
+class Log():
+    def __init__(self, x, y):
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/log.png')), (48, 48))
+        self.rect = self.image.get_rect()
+        self.rect.x = x * TILE_SIZE
+        self.rect.y = y * TILE_SIZE
+
+class Bench():
+    def __init__(self, x, y):
+        self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/bench.png')), (42, 42))
+        self.rect = self.image.get_rect()
+        self.rect.x = x * TILE_SIZE
+        self.rect.y = y * TILE_SIZE
 class Player:
     def __init__(self, x, y, size, image):
         self.x = x
@@ -175,7 +274,209 @@ class Car:
         self.rect.x = self.x
         self.rect.y = self.y
 
+class Player2:
+    def __init__(self, x, y, size, image):
+        self.image = pygame.transform.scale((pygame.image.load('graphics/doggos/doggo1/tile000.png')), (32, 32))
+        self.x = x
+        self.y = y
+        self.rect = self.image.get_rect(center=(self.x, self.y))
+        self.size = size
+        self.image = image
+        self.rect.x = x
+        self.rect.y = y
+        self.animation_counter = 0
+        self.current_sprite = 0
+        self.play_animation = False
+        self.left_sprites = [pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile012.png'), -20),
+                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile013.png'), -20),
+                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile014.png'), -20),
+                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile015.png'), -20),
+                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile016.png'), -20),
+                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile017.png'), -20),
+                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile018.png'), -20),
+                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile019.png'), -20),
+                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile020.png'), -20),
+                             ]
+        self.right_sprites = [
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile012.png'), 20), True, False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile013.png'), 20), True, False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile014.png'), 20), True, False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile015.png'), 20), True, False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile016.png'), 20), True, False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile017.png'), 20), True, False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile018.png'), 20), True, False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile019.png'), 20), True, False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile020.png'), 20), True, False)
+        ]
+        self.up_sprites = [
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile012.png'), 310), True,
+                False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile013.png'), 310), True,
+                False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile014.png'), 310), True,
+                False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile015.png'), 310), True,
+                False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile016.png'), 310), True,
+                False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile017.png'), 310), True,
+                False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile018.png'), 310), True,
+                False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile019.png'), 310), True,
+                False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile020.png'), 310), True,
+                False)]
+        self.down_sprites = [pygame.transform.flip(
+            pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile012.png'), 30), False,
+            False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile013.png'), 30), False,
+                False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile014.png'), 30), False,
+                False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile015.png'), 30), False,
+                False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile016.png'), 30), False,
+                False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile017.png'), 30), False,
+                False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile018.png'), 30), False,
+                False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile019.png'), 30), False,
+                False),
+            pygame.transform.flip(
+                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile020.png'), 30), False,
+                False)]
+        self.current_animation = self.up_sprites
+        self.animation_timer = pygame.time.get_ticks()
+        self.animation_interval = 18
 
+    def draw(self, surface):
+        if self.current_animation and len(self.current_animation) > 0:
+            surface.blit(self.current_animation[self.current_sprite], self.rect)
+
+    def update(self):
+        if self.play_animation:  # Check if the animation should play
+            current_time = pygame.time.get_ticks()
+            if self.current_animation and len(self.current_animation) > 0:
+                if current_time - self.animation_timer >= self.animation_interval:
+                    self.animation_timer = current_time
+                    self.current_sprite = (self.current_sprite + 1) % len(self.current_animation)
+                    if self.current_sprite == 0:
+                        self.play_animation = False  # Stop the animation once it completes playing
+    def move(self, dx, dy):
+        self.x += dx
+        self.y += dy
+        self.rect.topleft = (self.x, self.y)
+
+    def handle_event(self, event):
+        if event.type == pygame.KEYDOWN:
+            moving_sound = mixer.Sound("audio/jump1.mp3")
+            moving_sound2 = mixer.Sound("audio/jump2.mp3")
+            moving_sound.set_volume(.1)
+            moving_sound2.set_volume(.3)
+            moving_sound.play()
+            moving_sound2.play()
+            if event.key == pygame.K_LEFT:
+                self.current_animation = self.left_sprites
+            elif event.key == pygame.K_RIGHT:
+                self.current_animation = self.right_sprites
+            elif event.key == pygame.K_UP:
+                self.current_animation = self.up_sprites
+            elif event.key == pygame.K_DOWN:
+                self.current_animation = self.down_sprites
+            self.play_animation = True
+
+    def get_rect(self):
+        return self.rect.copy()
+class Game:
+    def __init__(self):
+        self.screen = pygame.display.set_mode(SCREEN_SIZE)
+        self.clock = pygame.time.Clock()
+
+    def loadLVL(self, lvl):
+        f = open(lvl, "r")
+        data = f.readlines()
+        t = []
+        for y in range(len(data)):
+            for x in range(len(data[y])):
+                if data[y][x] == "1":
+                    t.append(Grass(x, y))
+                    if random.randint(0, 2) and random.randint(1, 4) == 1:
+                        t.append(TallTree(x - 1, y - Decimal(1.15)))
+                    if random.randint(0, 2) and random.randint(1, 4) == 1:
+                        t.append(ShortTree(x - 1, y - Decimal(1.15)))
+                    if random.randint(0, 2) and random.randint(1, 4) == 1:
+                        t.append(SmallRock(x - Decimal(0.75), y - Decimal(0.9)))
+                    if random.randint(0, 2) and random.randint(1, 5) == 1:
+                        t.append(Bench(x - 1, y - Decimal(.5)))
+                elif data[y][x] == "2":
+                    t.append(Water(x, y))
+                    if random.randint(0, 2) and random.randint(1, 2) == 1:
+                        t.append(Lilypad(x - 1, y - Decimal(0.75)))
+                    if random.randint(0, 2) and random.randint(1, 2) == 1:
+                        t.append(Log(x - Decimal(0.85), y - Decimal(0.6)))
+                elif data[y][x] == "3":
+                    t.append(Railroad(x, y))
+                elif data[y][x] == "4":
+                    t.append(Road(x, y))
+                elif data[y][x] == "P":
+                    self.player = Player2(x + 775, y + 140, 32, pygame.image.load('graphics/doggos/doggo1/tile000.png'))
+                    t.append(Grass(x, y))
+        return t
+
+    def events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+
+    def renderSCR(self):
+        for tile in self.tiles:
+            render(tile, self.screen)
+        render(self.player, self.screen)
+        pygame.display.update()
+
+    def start(self):
+        self.tiles = self.loadLVL("map.txt")
+
+    def update(self):
+        while True:
+            self.events()
+            self.player.update()
+            self.renderSCR()
+            self.clock.tick(60)
+
+    def main(self):
+        self.start()
+        self.update()
 # collision logic
 def update_game():
     global game_over
@@ -341,6 +642,7 @@ while not end_start:
 
 game_over = False
 clock = pygame.time.Clock()
+g = Game()
 
 move_left = False
 move_right = False
@@ -385,6 +687,7 @@ while not game_over:
     update_game()
     pygame.display.update()
     clock.tick(60)
+    g.main()
 
 end.end_screen()
 pygame.quit()
