@@ -288,13 +288,12 @@ class Car:
 
 
 class Player2:
-    def __init__(self, x, y, size, image):
+    def __init__(self, x, y, size):
         self.image = pygame.transform.scale((pygame.image.load('graphics/doggos/doggo6/tile000.png')), (32, 32))
         self.x = x
         self.y = y
         self.rect = self.image.get_rect(center=(self.x, self.y))
         self.size = size
-        self.image = image
         self.rect.x = x
         self.rect.y = y
         self.animation_counter = 0
@@ -390,7 +389,6 @@ class Player2:
         self.animation_interval = 18
 
     def draw(self, surface):
-
         if self.current_animation and len(self.current_animation) > 0:
             surface.blit(self.current_animation[self.current_sprite], self.rect)
 
@@ -476,7 +474,7 @@ class Game:
                 elif data[y][x] == "4":
                     t.append(Road(x, y))
                 elif data[y][x] == "P":
-                    self.player = Player2(x + 975, y + 900, 32, pygame.image.load('graphics/doggos/doggo4/tile000.png'))
+                    self.player = Player2(x + 975, y + 900, 32)
                     t.append(Grass(x, y))
         return t
 
@@ -541,7 +539,7 @@ player_x = screen_width // 2 - player_size // 2
 player_y = screen_height - player_size - 10
 
 player_image = pygame.image.load('graphics/doggos/doggo1/tile000.png')
-player = Player2(player_x, player_y, player_size, player_image)
+player = Player2(player_x, player_y, player_size)
 
 # Set up enemy cars
 car_width = 140
