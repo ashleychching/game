@@ -15,23 +15,16 @@ replay = pygame.transform.scale_by(replay, (.15, .15))
 replayRect = replay.get_rect()
 replayRect.center = (screen_width / 2, screen_height / 1.7)
 
-game_over = False
-
 
 def end_screen():
-    global game_over
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return False
+                pygame.quit()
+                exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    return True
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                # Check if the left mouse button is clicked
-                mouse_pos = pygame.mouse.get_pos()
-                if replayRect.collidepoint(mouse_pos):
-                    return True
+                    return
 
         window.fill([255, 255, 255])  # Fill the window with white color
         window.blit(replay, replayRect)
@@ -41,3 +34,6 @@ def end_screen():
         pygame.display.flip()
 
 
+# Call the start_screen() function when the module is executed directly
+if __name__ == "__main__":
+    end_screen()
