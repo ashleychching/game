@@ -494,6 +494,8 @@ class Game:
     def renderSCR(self):
         for tile in self.tiles:
             render(tile, self.screen)
+        player.draw(self.screen)
+        car.draw(self.screen)
         render(self.player, self.screen)
         pygame.display.update()
 
@@ -718,6 +720,8 @@ while not game_over:
     player.update()
     window.fill(Colors.purple)
     player.draw(window)
+
+    car.draw(window)
     update_game()
     pygame.display.update()
     clock.tick(60)
