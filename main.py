@@ -120,16 +120,42 @@ class Bench():
         self.rect.y = y * TILE_SIZE
 
 
-'''class Player:
-    def __init__(self, x, y, size, image):
+class Car:
+    def __init__(self, x, y, width, height, speed, image):
         self.x = x
         self.y = y
-        self.size = size
-        self.image = image
+        self.width = width
+        self.height = height
+        self.speed = speed
+        self.image = pygame.transform.scale(image, (width, height))
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+
+    def draw(self, surface):
+        surface.blit(self.image, (self.x, self.y))
+
+    def update(self):
+        self.x -= self.speed
+        self.rect.x = self.x
+
+    def reset(self, screen_width, screen_height):
+        self.x = screen_width + self.width
+        self.y = random.randint(0, screen_height - self.height)
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+
+class Player2:
+    def __init__(self, x, y, size):
+        self.image = (pygame.image.load('graphics/doggos/doggo5/tile000.png'))
+        self.x = x
+        self.y = y
         self.rect = self.image.get_rect(center=(self.x, self.y))
-        self.animation_counter = 0
-        self.current_sprite = 0
+        self.size = size
+        self.rect.x = x
+        self.rect.y = y
         self.play_animation = False
+        self.animation_timer = pygame.time.get_ticks()
+        self.animation_interval = 18
         self.left_sprites = [pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile012.png'), -20),
                              pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile013.png'), -20),
                              pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile014.png'), -20),
@@ -216,102 +242,43 @@ class Bench():
                 pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile020.png'), 30), False,
                 False)]
         self.current_animation = self.up_sprites
-        self.animation_timer = pygame.time.get_ticks()
-        self.animation_interval = 18
-
-    def draw(self, surface):
-        if self.current_animation and len(self.current_animation) > 0:
-            surface.blit(self.current_animation[self.current_sprite], self.rect)
-
-    def update(self):
-        print(self.play_animation)
-        if self.play_animation:  # Check if the animation should play
-            print(self.play_animation)
-            current_time = pygame.time.get_ticks()
-            if self.current_animation and len(self.current_animation) > 0:
-                if current_time - self.animation_timer >= self.animation_interval:
-                    self.animation_timer = current_time
-                    self.current_sprite = (self.current_sprite + 1) % len(self.current_animation)
-
-                    if self.current_sprite == 0:
-                        self.play_animation = False  # Stop the animation once it completes playing
-
-    def move(self, dx, dy):
-        self.x += dx
-        self.y += dy
-        self.rect.topleft = (self.x, self.y)
-
-    def handle_event(self, event):
-        if event.type == pygame.KEYDOWN:
-            moving_sound = mixer.Sound("audio/jump1.mp3")
-            moving_sound2 = mixer.Sound("audio/jump2.mp3")
-            moving_sound.set_volume(.1)
-            moving_sound2.set_volume(.3)
-            moving_sound.play()
-            moving_sound2.play()
-            if event.key == pygame.K_LEFT:
-                self.current_animation = self.left_sprites
-            elif event.key == pygame.K_RIGHT:
-                self.current_animation = self.right_sprites
-            elif event.key == pygame.K_UP:
-                self.current_animation = self.up_sprites
-            elif event.key == pygame.K_DOWN:
-                self.current_animation = self.down_sprites
-            self.play_animation = True
-
-    def get_rect(self):
-        return self.rect.copy()
-
-'''
-
-
-class Car:
-    def __init__(self, x, y, width, height, speed, image):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.speed = speed
-        self.image = pygame.transform.scale(image, (width, height))
-        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
-
-    def draw(self, surface):
-        surface.blit(self.image, (self.x, self.y))
-
-    def update(self):
-        self.x -= self.speed
-        self.rect.x = self.x
-
-    def reset(self, screen_width, screen_height):
-        self.x = screen_width + self.width
-        self.y = random.randint(0, screen_height - self.height)
-        self.rect.x = self.x
-        self.rect.y = self.y
-
-
-class Player2:
-    def __init__(self, x, y, size):
-        self.image = (pygame.image.load('graphics/doggos/doggo6/tile000.png'))
-        self.x = x
-        self.y = y
-        self.rect = self.image.get_rect(center=(self.x, self.y))
-        self.size = size
-        self.rect.x = x
-        self.rect.y = y
         self.play_animation = False
-        self.animation_timer = pygame.time.get_ticks()
-        self.animation_interval = 18
+        self.current_sprite = 0
 
     def update(self):
         k = pygame.key.get_pressed()
         if k[K_UP]:
             self.rect.y -= 5
+            self.current_animation = self.up_sprites
+            self.play_animation = True
+            self.image= self.current_animation[self.current_sprite]
+
         if k[K_DOWN]:
             self.rect.y += 5
+            self.current_animation = self.down_sprites
+            self.play_animation = True
+            self.image= self.current_animation[self.current_sprite]
         if k[K_LEFT]:
             self.rect.x -= 5
+            self.current_animation = self.left_sprites
+            self.play_animation = True
+            self.image= self.current_animation[self.current_sprite]
         if k[K_RIGHT]:
             self.rect.x += 5
+            self.current_animation = self.right_sprites
+            self.play_animation = True
+            self.image= self.current_animation[self.current_sprite]
+
+
+        # Move this block inside the update method
+        current_time = pygame.time.get_ticks()
+        if self.play_animation and self.current_animation:
+            if current_time - self.animation_timer >= self.animation_interval:
+                self.animation_timer = current_time
+                self.current_sprite = (self.current_sprite + 1) % len(self.current_animation)
+
+        # Update the player's position using the rect object
+        self.rect.topleft = (self.rect.x, self.rect.y)
 
     def get_rect(self):
         return self.rect.copy()
@@ -350,6 +317,7 @@ class Game:
                     t.append(Road(x, y))
                 elif data[y][x] == "P":
                     self.player = Player2(x + 975, y + 900, 32)
+                    self.player.update()
                     t.append(Grass(x, y))
         return t
 
@@ -535,13 +503,44 @@ game_over = False
 clock = pygame.time.Clock()
 g = Game()
 
+move_left = False
+move_right = False
+move_up = False
+move_down = False
+
 # game loop
 while not game_over:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_over = True
 
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT and not move_left:
+                move_left = True
+                player.move(-40, 0)
+            elif event.key == pygame.K_RIGHT and not move_right:
+                move_right = True
+                player.move(40, 0)
+            elif event.key == pygame.K_UP and not move_up:
+                move_up = True
+                player.move(0, -40)
+            elif event.key == pygame.K_DOWN and not move_down:
+                move_down = True
+                player.move(0, 40)
+
+            # Check for key release events
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT:
+                move_left = False
+            elif event.key == pygame.K_RIGHT:
+                move_right = False
+            elif event.key == pygame.K_UP:
+                move_up = False
+            elif event.key == pygame.K_DOWN:
+                move_down = False
+
     window.fill(Colors.purple)
+
     car.draw(window)
     update_game()
     pygame.display.update()
