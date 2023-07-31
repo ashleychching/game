@@ -110,7 +110,7 @@ class Bench():
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
 
-'''
+
 class Player:
     def __init__(self, x, y, size):
         self.x = x
@@ -256,7 +256,7 @@ class Player:
         return self.rect.copy()
 
 
-'''
+
 class Car:
     def __init__(self, x, y, width, height, speed, image):
         self.x = x
