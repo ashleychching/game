@@ -129,19 +129,9 @@ class Car:
         self.speed = speed
         self.image = pygame.transform.scale(image, (width, height))
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
-
-    def draw(self, surface):
-        surface.blit(self.image, (self.x, self.y))
-
     def update(self):
         self.x -= self.speed
         self.rect.x = self.x
-
-    def reset(self, screen_width, screen_height):
-        self.x = screen_width + self.width
-        self.y = random.randint(0, screen_height - self.height)
-        self.rect.x = self.x
-        self.rect.y = self.y
 
 
 class Player2:
@@ -244,6 +234,7 @@ class Player2:
         self.current_animation = self.up_sprites
         self.play_animation = False
         self.current_sprite = 0
+        self.click_animation = False
 
     def update(self):
         k = pygame.key.get_pressed()
@@ -252,7 +243,6 @@ class Player2:
             self.current_animation = self.up_sprites
             self.play_animation = True
             self.image= self.current_animation[self.current_sprite]
-
         if k[K_DOWN]:
             self.rect.y += 5
             self.current_animation = self.down_sprites
@@ -269,13 +259,13 @@ class Player2:
             self.play_animation = True
             self.image= self.current_animation[self.current_sprite]
 
-
         # Move this block inside the update method
         current_time = pygame.time.get_ticks()
         if self.play_animation and self.current_animation:
             if current_time - self.animation_timer >= self.animation_interval:
                 self.animation_timer = current_time
                 self.current_sprite = (self.current_sprite + 1) % len(self.current_animation)
+
 
         # Update the player's position using the rect object
         self.rect.topleft = (self.rect.x, self.rect.y)
@@ -315,10 +305,13 @@ class Game:
                     t.append(Railroad(x, y))
                 elif data[y][x] == "4":
                     t.append(Road(x, y))
+                    self.car = Car(x + 575, y + 400, 140, 70, 5, pygame.image.load('graphics/cars/tile002.png'))
                 elif data[y][x] == "P":
+
+                    t.append(Grass(x, y))
                     self.player = Player2(x + 975, y + 900, 32)
                     self.player.update()
-                    t.append(Grass(x, y))
+
         return t
 
     def events(self):
@@ -335,6 +328,7 @@ class Game:
         for tile in self.tiles:
             render(tile, self.screen)
         render(self.player, self.screen)
+        render(self.car, self.screen)
         pygame.display.update()
 
     def start(self):
@@ -351,27 +345,6 @@ class Game:
         self.start()
         self.update()
 
-
-# collision logic
-def update_game():
-    global game_over
-
-    car.update()
-    car.draw(window)
-
-    if car.x < -car.width:
-        car.reset(screen_width, screen_height)
-
-    car_rect = car.rect
-
-
-# Set up enemy cars
-car_width = 140
-car_height = 70
-car_speed = 5
-car_image = pygame.image.load('graphics/cars/tile001.png')
-car = Car(screen_width + car_width, random.randint(0, screen_height - car_height), car_width, car_height, car_speed,
-          car_image)
 
 # start/play button
 start_button_width = 200
@@ -514,35 +487,9 @@ while not game_over:
         if event.type == pygame.QUIT:
             game_over = True
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT and not move_left:
-                move_left = True
-                player.move(-40, 0)
-            elif event.key == pygame.K_RIGHT and not move_right:
-                move_right = True
-                player.move(40, 0)
-            elif event.key == pygame.K_UP and not move_up:
-                move_up = True
-                player.move(0, -40)
-            elif event.key == pygame.K_DOWN and not move_down:
-                move_down = True
-                player.move(0, 40)
 
-            # Check for key release events
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT:
-                move_left = False
-            elif event.key == pygame.K_RIGHT:
-                move_right = False
-            elif event.key == pygame.K_UP:
-                move_up = False
-            elif event.key == pygame.K_DOWN:
-                move_down = False
 
     window.fill(Colors.purple)
-
-    car.draw(window)
-    update_game()
     pygame.display.update()
     clock.tick(60)
     g.main()
