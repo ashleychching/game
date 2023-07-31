@@ -263,6 +263,8 @@ class Bench():
         return self.rect.copy()
 
 '''
+
+
 class Car:
     def __init__(self, x, y, width, height, speed, image):
         self.x = x
@@ -289,108 +291,16 @@ class Car:
 
 class Player2:
     def __init__(self, x, y, size):
-        self.image = pygame.transform.scale((pygame.image.load('graphics/doggos/doggo6/tile000.png')), (32, 32))
+        self.image = (pygame.image.load('graphics/doggos/doggo6/tile000.png'))
         self.x = x
         self.y = y
         self.rect = self.image.get_rect(center=(self.x, self.y))
         self.size = size
         self.rect.x = x
         self.rect.y = y
-        self.animation_counter = 0
-        self.current_sprite = 0
         self.play_animation = False
-        self.left_sprites = [pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile012.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile013.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile014.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile015.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile016.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile017.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile018.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile019.png'), -20),
-                             pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo1/tile020.png'), -20),
-                             ]
-        self.right_sprites = [
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile012.png'), 20), True, False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile013.png'), 20), True, False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile014.png'), 20), True, False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile015.png'), 20), True, False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile016.png'), 20), True, False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile017.png'), 20), True, False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile018.png'), 20), True, False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile019.png'), 20), True, False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo5/tile020.png'), 20), True, False)
-        ]
-        self.up_sprites = [
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile012.png'), 310), True,
-                False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile013.png'), 310), True,
-                False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile014.png'), 310), True,
-                False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile015.png'), 310), True,
-                False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile016.png'), 310), True,
-                False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile017.png'), 310), True,
-                False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile018.png'), 310), True,
-                False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile019.png'), 310), True,
-                False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile020.png'), 310), True,
-                False)]
-        self.down_sprites = [pygame.transform.flip(
-            pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile012.png'), 30), False,
-            False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile013.png'), 30), False,
-                False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile014.png'), 30), False,
-                False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile015.png'), 30), False,
-                False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile016.png'), 30), False,
-                False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile017.png'), 30), False,
-                False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile018.png'), 30), False,
-                False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile019.png'), 30), False,
-                False),
-            pygame.transform.flip(
-                pygame.transform.rotate(pygame.image.load('graphics/doggos/doggo6/tile020.png'), 30), False,
-                False)]
-        self.current_animation = self.up_sprites
         self.animation_timer = pygame.time.get_ticks()
         self.animation_interval = 18
-
-    def draw(self, surface):
-        if self.current_animation and len(self.current_animation) > 0:
-            surface.blit(self.current_animation[self.current_sprite], self.rect)
 
     def update(self):
         k = pygame.key.get_pressed()
@@ -402,41 +312,6 @@ class Player2:
             self.rect.x -= 5
         if k[K_RIGHT]:
             self.rect.x += 5
-        if self.play_animation:  # Check if the animation should play
-            current_time = pygame.time.get_ticks()
-            if self.current_animation and len(self.current_animation) > 0:
-                if current_time - self.animation_timer >= self.animation_interval:
-                    self.animation_timer = current_time
-                    self.current_sprite = (self.current_sprite + 1) % len(self.current_animation)
-                    if self.current_sprite == 0:
-                        self.play_animation = False  # Stop the animation once it completes playing
-
-    def move(self, dx, dy):
-        self.x += dx
-        self.y += dy
-        self.rect.topleft = (self.x, self.y)
-
-    def handle_event(self, event):
-        if event.type == pygame.KEYDOWN:
-            moving_sound = mixer.Sound("audio/jump1.mp3")
-            moving_sound2 = mixer.Sound("audio/jump2.mp3")
-            moving_sound.set_volume(.1)
-            moving_sound2.set_volume(.3)
-            moving_sound.play()
-            moving_sound2.play()
-            if event.key == pygame.K_LEFT:
-                print("left")
-                self.current_animation = self.left_sprites
-                print(self.current_animation)
-            elif event.key == pygame.K_RIGHT:
-                print("right")
-                self.current_animation = self.right_sprites
-                print(self.current_animation)
-            elif event.key == pygame.K_UP:
-                self.current_animation = self.up_sprites
-            elif event.key == pygame.K_DOWN:
-                self.current_animation = self.down_sprites
-            self.play_animation = True
 
     def get_rect(self):
         return self.rect.copy()
@@ -488,14 +363,9 @@ class Game:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
 
-            self.player.handle_event(event)
-        self.player.update()
-
     def renderSCR(self):
         for tile in self.tiles:
             render(tile, self.screen)
-        player.draw(self.screen)
-        car.draw(self.screen)
         render(self.player, self.screen)
         pygame.display.update()
 
@@ -524,24 +394,8 @@ def update_game():
     if car.x < -car.width:
         car.reset(screen_width, screen_height)
 
-    player_rect = player.get_rect()
     car_rect = car.rect
 
-    if player_rect.colliderect(car_rect):
-        crash_sound = mixer.Sound("audio/crash.mp3")
-        crash_sound.set_volume(.3)
-        crash_sound.play()
-        time.sleep(.5)
-        game_over = True
-
-
-# Set up the player character
-player_size = 50
-player_x = screen_width // 2 - player_size // 2
-player_y = screen_height - player_size - 10
-
-player_image = pygame.image.load('graphics/doggos/doggo1/tile000.png')
-player = Player2(player_x, player_y, player_size)
 
 # Set up enemy cars
 car_width = 140
@@ -681,46 +535,13 @@ game_over = False
 clock = pygame.time.Clock()
 g = Game()
 
-move_left = False
-move_right = False
-move_up = False
-move_down = False
-
 # game loop
 while not game_over:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_over = True
-        player.handle_event(event)
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT and not move_left:
-                move_left = True
-                player.move(-40, 0)
-            elif event.key == pygame.K_RIGHT and not move_right:
-                move_right = True
-                player.move(40, 0)
-            elif event.key == pygame.K_UP and not move_up:
-                move_up = True
-                player.move(0, -40)
-            elif event.key == pygame.K_DOWN and not move_down:
-                move_down = True
-                player.move(0, 40)
-
-            # Check for key release events
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT:
-                move_left = False
-            elif event.key == pygame.K_RIGHT:
-                move_right = False
-            elif event.key == pygame.K_UP:
-                move_up = False
-            elif event.key == pygame.K_DOWN:
-                move_down = False
-    player.update()
     window.fill(Colors.purple)
-    player.draw(window)
-
     car.draw(window)
     update_game()
     pygame.display.update()
