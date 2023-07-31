@@ -8,6 +8,7 @@ import time
 
 from audio import play_audio
 
+exec(open('select_page.py').read())
 window, screen_width, screen_height = setup_screen()
 
 SCREEN_SIZE = (800, 600)
@@ -31,14 +32,11 @@ with open("map.txt", 'w') as file:
     rowDisplay = [f'{row}{row.join(mapValues)}']
     file.writelines(rowDisplay)
 
-
 def toSCRCoord(x, y):
     return (x - y, (x + y) / 2 - 420)
 
-
 def render(object, screen):
     screen.blit(object.image, toSCRCoord(object.rect.x, object.rect.y))
-
 
 class Grass():
     def __init__(self, x, y):
@@ -47,7 +45,6 @@ class Grass():
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
 
-
 class Water():
     def __init__(self, x, y):
         self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/water.png')), (64, 64))
@@ -55,14 +52,12 @@ class Water():
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
 
-
 class Railroad():
     def __init__(self, x, y):
         self.image = pygame.transform.scale((pygame.image.load('graphics/blocks/railroad.png')), (64, 64))
         self.rect = self.image.get_rect()
         self.rect.x = x * TILE_SIZE
         self.rect.y = y * TILE_SIZE
-
 
 class Road():
     def __init__(self, x, y):
