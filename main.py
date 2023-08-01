@@ -129,10 +129,15 @@ class Car:
         self.speed = speed
         self.image = pygame.transform.scale(image, (width, height))
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.delay = random.randint(30, 100)
+        self.start_x = x
     def update(self):
         self.x -= self.speed
         self.rect.x = self.x
 
+    def reset(self):
+        self.x = self.start_x  # Reset the car's x-coordinate to the initial starting point
+        self.delay = random.randint(30, 100)
 
 class Player2:
     def __init__(self, x, y, size):
@@ -305,9 +310,9 @@ class Game:
                     t.append(Railroad(x, y))
                 elif data[y][x] == "4":
                     t.append(Road(x, y))
-                    self.car = Car(x + 575, y + 400, 140, 70, 5, pygame.image.load('graphics/cars/tile002.png'))
+                    self.car = Car(x , y , 140, 70, 5, pygame.image.load('graphics/cars/tile002.png'))
+                    t.append(Car(x,y,140, 70, 5, pygame.image.load('graphics/cars/tile001.png')))
                 elif data[y][x] == "P":
-
                     t.append(Grass(x, y))
                     self.player = Player2(x + 975, y + 900, 32)
                     self.player.update()
@@ -328,16 +333,37 @@ class Game:
         for tile in self.tiles:
             render(tile, self.screen)
         render(self.player, self.screen)
-        render(self.car, self.screen)
+        for car in self.cars:
+            render(car, self.screen)
         pygame.display.update()
 
     def start(self):
         self.tiles = self.loadLVL("map.txt")
+        self.cars = []  # List to hold multiple car instances
+        car_spacing = 150
+        for i in range(5):  # Add 5 cars
+            car = Car(1075 + i * car_spacing , 400, 70, 35, 3, pygame.image.load('graphics/cars/tile002.png'))
+            self.cars.append(car)
 
     def update(self):
         while True:
             self.events()
             self.player.update()
+            self.car.update()
+
+            for car in self.cars:
+                # Update the car's position if the delay has passed
+                if car.delay <= 0:
+                    car.update()
+                else:
+                    car.delay -= 1
+
+                # Respawn the car at the right edge if it goes off the screen
+                if car.x + car.width < 0:
+                    car.x = screen_width
+                    car.delay = random.randint(0, 100)
+                    # Set a new random delay before starting again
+                    car.reset()
             self.renderSCR()
             self.clock.tick(60)
 
