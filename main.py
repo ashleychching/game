@@ -120,24 +120,54 @@ class Bench():
         self.rect.y = y * TILE_SIZE
 
 
+
 class Car:
     def __init__(self, x, y, width, height, speed, image):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
-        self.speed = speed
+        self.speed = 2
         self.image = pygame.transform.scale(image, (width, height))
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.delay = random.randint(30, 100)
         self.start_x = x
+        self.spawned = False  # A flag to indicate if the car has been spawned
+        self.spawn_pos = (x, y)  # Store the spawn position
+        self.direction = 1
+
     def update(self):
-        self.x -= self.speed
+        # self.x -= self.speed
+        self.x += self.speed * self.direction
         self.rect.x = self.x
+        if self.direction == 1:
+            # If the car is moving from left to right, check if it's off-screen on the right side
+            if self.x > SCREEN_SIZE[0]:
+                # If off-screen, reset the car to the left side
+                self.x = -self.width
+                self.rect.x = self.x
+        else:
+            # If the car is moving from right to left, check if it's off-screen on the left side
+            if self.x < -self.width:
+                # If off-screen, reset the car to the right side
+                self.x = SCREEN_SIZE[0]
+                self.rect.x = self.x
+
+        if not self.spawned:  # If the car has not been spawned yet
+            self.delay -= 1  # Reduce the delay until it reaches 0
+            if self.delay <= 0:
+                self.spawned = True  # Set the flag to indicate the car has been spawned
+                self.x = self.spawn_pos[0]  # Set the car's x-coordinate to the spawn position
+                self.rect.x = self.x
+                self.rect.y = self.y
+        else:
+            self.x += self.speed * self.direction
+            self.rect.x = self.x
 
     def reset(self):
         self.x = self.start_x  # Reset the car's x-coordinate to the initial starting point
         self.delay = random.randint(30, 100)
+
 
 class Player2:
     def __init__(self, x, y, size):
@@ -288,6 +318,7 @@ class Game:
         f = open(lvl, "r")
         data = f.readlines()
         t = []
+        self.road_tiles = []
         for y in range(len(data)):
             for x in range(len(data[y])):
                 if data[y][x] == "1":
@@ -312,6 +343,7 @@ class Game:
                     t.append(Road(x, y))
                     self.car = Car(x , y , 140, 70, 5, pygame.image.load('graphics/cars/tile002.png'))
                     t.append(Car(x,y,140, 70, 5, pygame.image.load('graphics/cars/tile001.png')))
+                    self.road_tiles.append((x, y))
                 elif data[y][x] == "P":
                     t.append(Grass(x, y))
                     self.player = Player2(x + 975, y + 900, 32)
@@ -339,12 +371,31 @@ class Game:
 
     def start(self):
         self.tiles = self.loadLVL("map.txt")
-        self.cars = []  # List to hold multiple car instances
-        car_spacing = 150
-        for i in range(5):  # Add 5 cars
-            car = Car(1075 + i * car_spacing , 400, 70, 35, 3, pygame.image.load('graphics/cars/tile002.png'))
-            self.cars.append(car)
+        self.cars = []
+        car_spacing = 350
+        num_cars_per_road = 1
+        cars_per_road = {}
 
+        for i, (x, y) in enumerate(self.road_tiles):
+            while len(cars_per_road.get((x, y), [])) < num_cars_per_road:
+                # Determine the initial_x based on the car's direction
+                initial_x = -100 if random.randint(0, 1) == 0 else SCREEN_SIZE[0]*2
+                car = Car(initial_x, y * TILE_SIZE, 70, 35, 2,
+                          pygame.image.load('graphics/cars/tile002.png'))  # Slower speed
+                self.cars.append(car)
+
+                # Set the direction of the car based on its initial_x
+                car.direction = 1 if initial_x == -100 else -1
+
+                # Add the car to the list of cars on this road
+                cars_per_road.setdefault((x, y), []).append(car)
+
+                # Call reset to set the car to its starting position
+                car.reset()
+
+        # Print the count of cars generated for each road after the loop
+        for road, cars_list in cars_per_road.items():
+            print(f"Road {road}: {len(cars_list)} cars generated")
     def update(self):
         while True:
             self.events()
